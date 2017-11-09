@@ -13,6 +13,7 @@ class PersonList: UIViewController {
     var apiRequest: APIRequest?
     var Persons = [PersonsModel]()
 
+    @IBOutlet weak var activityInd: UIActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
     
     
@@ -30,6 +31,10 @@ class PersonList: UIViewController {
 // MARK: - Get Data
 extension PersonList {
     func getPersons() {
+        self.activityInd.isHidden = false
+        self.activityInd.startAnimating()
+        self.tableView.isHidden = true
+        
         if (GlobalManager.isNetworkReachable() == false)
         {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -60,6 +65,9 @@ extension PersonList {
                 }
                 
                 DispatchQueue.main.async {
+                    self.activityInd.stopAnimating()
+                    self.activityInd.isHidden = true
+                    self.tableView.isHidden = false
                     self.tableView.reloadData()
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 }
